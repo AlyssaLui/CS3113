@@ -40,6 +40,8 @@ public:
 	void setVisible(bool isVisible);
 	void setFacingLeft(bool isFacingLeft);
 	void setRotation(float newRotation);
+	void setWidth(float newWidth);
+	void setHeight(float newHeight);
 
 	float getX();
 	float getY();
@@ -54,6 +56,8 @@ public:
 	bool getVisible();
 	bool getFacingLeft();
 	float getRotation();
+	float getAccelX();
+	float getAccelY();
 
 	void setCollidedTop(bool collided);
 	void setCollidedBottom(bool collided);

@@ -160,9 +160,9 @@ Vector Matrix::operator * (const Vector &v2) {
 
 	Vector v;
 
-	v.x = m00*v2.x + m01*v2.y + m02*v2.z;
-	v.y = m10*v2.x + m11*v2.y + m12*v2.z;
-	v.z = m20*v2.x + m21*v2.y + m22*v2.z;
+	v.x = m00*v2.x + m01*v2.y + m02*v2.z + m03;
+	v.y = m10*v2.x + m11*v2.y + m12*v2.z + m13;
+	v.z = m20*v2.x + m21*v2.y + m22*v2.z + m33;
 	
 
 	return v;

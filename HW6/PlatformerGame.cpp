@@ -30,12 +30,12 @@ void PlatformerGame::Init() {
 	rocket->setX(0.0);
 	rocket->setY(0.0);
 
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 20; i++) {
 		Entity* asteroid = new Entity(texture, 224.0 / 1024.0, 664.0 / 1024.0, 101.0 / 1024.0, 84.0 / 1024.0, true);
 		asteroid->setX(rand() % 3 -1);
 		asteroid->setY(rand() % 3 -1);
-		asteroid->setAccelX((rand() % 3 - 1) *0.03);
-		asteroid->setAccelY((rand() % 3 - 1) *0.03);
+		asteroid->setAccelX((rand() % 3 - 1) *0.5);
+		asteroid->setAccelY((rand() % 3 - 1) *0.5);
 		asteroids.push_back(asteroid);
 	}
 
@@ -45,7 +45,6 @@ bool PlatformerGame::UpdateandRender() {
 	SDL_Event event;
 	keys = SDL_GetKeyboardState(NULL);
 
-	float lastFrameTicks = 0.0f;
 	float ticks = (float)SDL_GetTicks() / 1000.0f;
 	float elapsed = ticks - lastFrameTicks;
 	lastFrameTicks = ticks;
@@ -67,33 +66,23 @@ bool PlatformerGame::UpdateandRender() {
 	}
 
 	if (keys[SDL_SCANCODE_LEFT]) {
-		rocket->setAccelX(-0.1);
+		rocket->setRotation(rocket->getRotation() + 50 * (elapsed));
 
 	}
 	else if (keys[SDL_SCANCODE_RIGHT]) {
-		rocket->setAccelX(0.1);
+		rocket->setRotation(rocket->getRotation() - 50 * (elapsed));
 
 	}
 	else if (keys[SDL_SCANCODE_UP]) {
-		rocket->setAccelY(0.1);
+		rocket->setAccelY(1.0);
 	}
 	else if (keys[SDL_SCANCODE_DOWN]) {
-		rocket->setAccelY(-0.1);
+		rocket->setAccelY(-1.0);
 	}
-	else if (keys[SDL_SCANCODE_A]) {
-		rocket->setRotation(rocket->getRotation() + (elapsed*0.05));
-	}
-	else if (keys[SDL_SCANCODE_D]) {
-		rocket->setRotation(rocket->getRotation() - (elapsed*0.05));
-	}
+	
 	else {
 		rocket->setAccelX(0.0);
 		rocket->setAccelY(0.0);
-	}
-
-
-	if (event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-		// Shoot
 	}
 
 	Render();
@@ -102,15 +91,36 @@ bool PlatformerGame::UpdateandRender() {
 
 void PlatformerGame::FixedUpdate() {
 	
+	if (rocket->getWidth() == (112.0 / 1024.0)) {
+		rocket->setU(325.0/1024.0);
+		rocket->setV(739.0 / 1024.0);
+		rocket->setWidth(98.0 / 1024.0);
+		rocket->setHeight(75.0 / 1024.0);
+	}
 	rocket->FixedUpdate();
 	for (int i = 0; i < asteroids.size(); i++) {
 		asteroids[i]->FixedUpdate();
+		if (asteroids[i]->getX() > 1.5 || asteroids[i]->getX() < -1.5) {
+			asteroids[i]->setX(-asteroids[i]->getX());
+		}
+		if (asteroids[i]->getY() > 1.5 || asteroids[i]->getY() < -1.5) {
+			asteroids[i]->setY(-asteroids[i]->getY());
+		}
+
 		for (int j = 0; j < asteroids.size(); j++) {
 			if (i != j) {
 				asteroids[i]->satCollidesWith(*asteroids[j]);
 			}
 		}
+		if (asteroids[i]->satCollidesWith(*rocket)) {
+			rocket->setU(0.0);
+			rocket->setV(941.0 / 1024.0);
+			rocket->setWidth(112.0 / 1024.0);
+			rocket->setHeight(75.0 / 1024.0);
+		}
 	}
+
+
 }
 
 void PlatformerGame::Render() {
@@ -119,9 +129,9 @@ void PlatformerGame::Render() {
 
 	rocket->render();
 	for (int i = 0; i < asteroids.size(); i++) {
-		asteroids[i]->render();
+		asteroids[i]->render();	
 	}
-
+	
 	SDL_GL_SwapWindow(displayWindow);
 }
 

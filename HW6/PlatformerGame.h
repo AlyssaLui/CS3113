@@ -27,8 +27,6 @@ public:
 	bool UpdateandRender();
 	void FixedUpdate();
 	void Render();
-	bool isSolid(unsigned char tiles);
-
 
 	GLuint loadTexture(const char *image_path);
 	const Uint8 *keys;
@@ -40,10 +38,10 @@ private:
 
 	bool done = false;
 	float timeLeftOver = 0.0f;
-
+	float lastFrameTicks;
 	Entity* rocket;
 	vector<Entity*> asteroids;
-	vector<Entity*> bullets;
+
 	SDL_Window* displayWindow;
 	
 };

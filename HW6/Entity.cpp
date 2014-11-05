@@ -68,6 +68,9 @@ void Entity::buildMatrix() {
 
 bool Entity::satCollidesWith(Entity otherEntity) {
 		
+	buildMatrix();
+	otherEntity.buildMatrix();
+
 	vector<Vector> penDist;
 
 	// My entity to world
@@ -212,15 +215,15 @@ bool Entity::satCollidesWith(Entity otherEntity) {
 	}
 	else
 		return false;
-/*
-	float shortestX = penDist[0].x;
-	float shortestY = penDist[0].y;
-	for (int i = 1; i < penDist.size(); i++) {
-		if (penDist[i].x < shortestX) {
+
+	float shortestX = 0.0;
+	float shortestY = 0.0;
+	float shortestLength = penDist[0].length();
+	for (int i = 0; i < penDist.size(); i++) {
+		if (penDist[i].length() < shortestLength) {
 			shortestX = penDist[i].x;
-		}
-		if (penDist[i].y < shortestY) {
 			shortestY = penDist[i].y;
+			shortestLength = penDist[i].length();
 		}
 	}
 
@@ -228,7 +231,7 @@ bool Entity::satCollidesWith(Entity otherEntity) {
 	y = y - (shortestY / 2);
 	otherEntity.setX(otherEntity.getX() - (shortestX / 2));
 	otherEntity.setY(otherEntity.getY() - (shortestY / 2));
-*/
+
 	return true;
 }
 
@@ -355,4 +358,19 @@ void Entity::setRotation(float newRotation) {
 
 float Entity::getRotation() {
 	return rotation;
+}
+
+float Entity::getAccelX() {
+	return accelerationX;
+}
+float Entity::getAccelY() {
+	return accelerationY;
+}
+
+void Entity::setWidth(float newWidth) {
+	width = newWidth;
+}
+
+void Entity::setHeight(float newHeight) {
+	height = newHeight;
 }
